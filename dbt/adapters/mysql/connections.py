@@ -26,6 +26,7 @@ class MySQLCredentials(Credentials):
     password: Optional[str] = None
     charset: Optional[str] = None
     collation: Optional[str] = None
+    branch: Optional[str] = None
 
     _ALIASES = {
         "UID": "username",
