@@ -27,7 +27,7 @@ class MySQLCredentials(Credentials):
     charset: Optional[str] = None
     ssl_disabled: Optional[bool] = None
     collation: Optional[str] = None
-
+    branch: Optional[str] = None
     _ALIASES = {
         "UID": "username",
         "user": "username",
@@ -38,7 +38,7 @@ class MySQLCredentials(Credentials):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
-            self.database = None
+            #self.database = None
 
     def __post_init__(self):
         # mysql classifies database and schema as the same thing
@@ -69,6 +69,7 @@ class MySQLCredentials(Credentials):
             "database",
             "schema",
             "user",
+            "branch",
         )
 
 
@@ -104,6 +105,9 @@ class MySQLConnectionManager(SQLConnectionManager):
 
         if credentials.collation:
             kwargs["collation"] = credentials.collation
+
+        if credentials.database and credentials.branch:
+            kwargs["database"] = f"{credentials.database}/{credentials.branch}"
 
         try:
             connection.handle = mysql.connector.connect(**kwargs)
