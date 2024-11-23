@@ -40,13 +40,12 @@ class MySQLCredentials(Credentials):
             self.database = None
 
     def __post_init__(self):
-        # mysql classifies database and schema as the same thing
-        if self.database is not None and self.database != self.schema:
+        # Allow Dolt's database/branch format
+        if self.database is not None and self.database != self.schema.split('/')[0]:
             raise dbt.exceptions.DbtRuntimeError(
                 f"    schema: {self.schema} \n"
                 f"    database: {self.database} \n"
-                f"On MySQL, database must be omitted or have the same value as"
-                f" schema."
+                f"Database must be omitted or match the database part of schema"
             )
 
     @property
@@ -111,8 +110,8 @@ class MySQLConnectionManager(SQLConnectionManager):
                     "Trying again with `database` included."
                 )
 
-                # Try again with the database included
-                kwargs["database"] = f"{credentials.schema}"
+                # Try again with the database included, supporting Dolt's database/branch format
+                kwargs["database"] = credentials.schema  # 直接使用完整的 schema 字符串
 
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
