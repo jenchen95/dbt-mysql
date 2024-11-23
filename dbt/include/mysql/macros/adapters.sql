@@ -37,20 +37,11 @@
 
   {{ sql_header if sql_header is not none }}
 
-  create {% if temporary: -%}temporary{%- endif %} table
-    {{ relation.include(database=False) }}
-    {% set contract_config = config.get('contract') %}
-    {% if contract_config.enforced %}
-      {{ get_assert_columns_equivalent(sql) }}
-      {{ get_table_columns_and_constraints() }}
-      {%- set sql = get_select_subquery(sql) %}
-    {% else %}
-      as
-    {% endif %}
-    (
+  create {% if temporary -%}temporary{%- endif %} table
+    {{ relation }}
+    as
       {{ sql }}
-    )
-{% endmacro %}
+{%- endmacro %}
 
 {% macro mysql__current_timestamp() -%}
   current_timestamp()

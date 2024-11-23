@@ -14,7 +14,7 @@ class MySQLQuotePolicy(Policy):
 @dataclass
 class MySQLIncludePolicy(Policy):
     database: bool = False
-    schema: bool = True
+    schema: bool = False
     identifier: bool = True
 
 
