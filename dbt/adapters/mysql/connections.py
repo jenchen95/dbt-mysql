@@ -100,6 +100,9 @@ class MySQLConnectionManager(SQLConnectionManager):
         if credentials.collation:
             kwargs["collation"] = credentials.collation
 
+        if credentials.database and credentials.branch:
+            kwargs["database"] = f"{credentials.database}/{credentials.branch}"
+
         try:
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = "open"
@@ -111,7 +114,7 @@ class MySQLConnectionManager(SQLConnectionManager):
                 )
 
                 # Try again with the database included, supporting Dolt's database/branch format
-                kwargs["database"] = credentials.schema  # 直接使用完整的 schema 字符串
+                kwargs["database"] = f"{credentials.schema}"  # 直接使用完整的 schema 字符串
 
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
