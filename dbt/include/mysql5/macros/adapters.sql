@@ -44,12 +44,12 @@
       {{ get_assert_columns_equivalent(sql) }}
       {{ get_table_columns_and_constraints() }}
       {%- set sql = get_select_subquery(sql) %}
+      {% else %}
+        as
+      {% endif %}
       (
         {{ sql }}
       )
-    {% else %}
-      {{ sql }}
-    {% endif %}
 {% endmacro %}
 
 {% macro mysql5__current_timestamp() -%}
