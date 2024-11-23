@@ -112,7 +112,7 @@ class MySQLConnectionManager(SQLConnectionManager):
                 )
 
                 # Try again with the database included
-                kwargs["database"] = f"`{credentials.schema}`"
+                kwargs["database"] = f"{credentials.schema}"
 
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
