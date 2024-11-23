@@ -38,7 +38,7 @@ class MySQLCredentials(Credentials):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
-            self.database = None
+            # self.database = None
 
     def __post_init__(self):
         # Allow Dolt's database/branch format
@@ -68,6 +68,7 @@ class MySQLCredentials(Credentials):
             "database",
             "schema",
             "user",
+            "branch",
         )
 
 
